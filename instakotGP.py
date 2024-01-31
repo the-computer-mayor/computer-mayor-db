@@ -1,10 +1,11 @@
 try:
     from string import ascii_letters, digits
     from random import shuffle, choices
-    from os import name as OSNAME
     from os import system, getpid
+    from os.path import dirname
     from random import choice
     from sys import argv
+    from os import name
     import subprocess
     import threading
     import json
@@ -17,6 +18,11 @@ try:
 
 
 
+    if name == "nt":PATH = dirname(__file__)+'\\';slash = '\\'
+    else:PATH = dirname(__file__)+'/'; slash = '/'
+    Logs = PATH+"InstaKot_Logs"+slash
+
+
     threads, timeout, rch = 150, 5, 0
     proxy_list, ExtraThreads = [], []
     fcb_add, CutOff, ProcessKilled, recieved = False, False, False, False
@@ -26,7 +32,7 @@ try:
 
     def Die():
         pid = getpid()
-        if OSNAME == "nt":
+        if name == "nt":
             system(f"taskkill /F /PID {pid} > NUL")
         else:
             system(f"kill {pid} > /dev/null")
@@ -117,14 +123,14 @@ try:
             if "content-type: application/json" in Respond.lower() and "200 OK" in Respond:
                 if recieved == False:
                     recieved, CutOff = True, True
-                    with open(filename, "w+", encoding="utf-8") as user:
+                    with open(Logs+filename, "x", encoding="utf-8") as user:
                         user.write(Respond)
                     user.close()
                     Die()
             elif "HTTP/1.1 404" in Respond:
                 if recieved == False:
                     recieved, CutOff = True, True
-                    with open(filename, "w+", encoding="utf-8") as user:
+                    with open(Logs+filename, "x", encoding="utf-8") as user:
                         user.write("404 USER (the-computer-mayor)")
                     user.close()
                     Die()
