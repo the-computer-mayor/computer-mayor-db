@@ -130,9 +130,6 @@ try:
             elif "HTTP/1.1 404" in Respond:
                 if recieved == False:
                     recieved, CutOff = True, True
-                    with open(Logs+filename, "x", encoding="utf-8") as user:
-                        user.write("404 USER (the-computer-mayor)")
-                    user.close()
                     Die()
 
 
